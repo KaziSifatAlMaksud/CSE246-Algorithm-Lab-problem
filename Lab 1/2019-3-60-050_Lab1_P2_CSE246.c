@@ -1,0 +1,60 @@
+/*2. You are given n number of product as input.
+each product has a particular weight W and value V.
+Your are also given a sack capacity C.
+Your task is to find the maximum profit that
+ can be made using the capacity C from the product n.*/
+
+
+#include<stdio.h>
+
+
+struct product
+{
+    int itemno ;
+    double weight ;
+    double value ;
+    double priceperweight ;
+}item[100], temp;
+int main()
+{
+    int n, i, j ;
+    double w ;
+    scanf("%lf", &w) ;
+    scanf("%d", &n) ;
+    for(i = 0 ; i < n ; i++){
+        item[i].itemno = i+1 ;
+        scanf("%lf %lf", &item[i].weight, &item[i].value) ;
+        item[i].priceperweight = item[i].value/item[i].weight ;
+    }
+
+    for(i = 0 ; i < n ; i++){
+        for(j = i+1 ; j < n ; j++){
+            if(item[i].priceperweight < item[j].priceperweight){
+                temp = item[i] ;
+                item[i] = item[j] ;
+                item[j] = temp ;
+            }
+        }
+    }
+    double currentweight = 0.0 ;
+    double totalProfit = 0.0 ;
+
+    for(i = 0 ; i < n ; i++){
+        if(currentweight + item[i].weight <= w){
+            currentweight += item[i].weight ;
+            totalProfit += item[i].value ;
+            printf("Product no %d is taken %.3lf amount. net Profit: %.3lf\n", item[i].itemno, item[i].weight, item[i].value) ;
+        }
+
+        else
+        {
+            double remain = w - currentweight ;
+            totalProfit += item[i].priceperweight*remain ;
+            printf("Product no %d is taken %.3lf amount. net Profit: %.3lf\n", item[i].itemno, remain, item[i].priceperweight*remain) ;
+            break ;
+        }
+    }
+    printf("Total Profit : %.3lf\n", totalProfit) ;
+
+}
+
